@@ -20,14 +20,13 @@ class shifter595:
         for i in range(24):
             bitwise = 0x800000 >> i
             bit = bitwise & value
-            print(bit)
             if bit == 0:
                 self.data_pin.off()
             else:
                 self.data_pin.on()
             self.tick()
 
-    def clear(self):
+    def latch(self):
         self.latch_pin.off()
         self.tick()
         self.latch_pin.on()
