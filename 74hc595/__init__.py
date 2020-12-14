@@ -2,7 +2,7 @@ from gpiozero import DigitalOutputDevice
 from time import sleep
 
 
-class Shifter:
+class shifter:
     def __init__(self):
         self.latch_pin = DigitalOutputDevice(16)
         self.clock_pin = DigitalOutputDevice(20)
