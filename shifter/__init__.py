@@ -28,6 +28,6 @@ class shifter595:
 
     def latch(self):
         self.latch_pin.off()
-        self.tick()
+        sleep(self.pause)
         self.latch_pin.on()
 
