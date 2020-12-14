@@ -20,6 +20,7 @@ class shifter595:
         for i in range(24):
             bitwise = 0x800000 >> i
             bit = bitwise & value
+            print(bit)
             if bit == 0:
                 self.data_pin.off()
             else:
