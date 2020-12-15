@@ -22,7 +22,7 @@ class shifter595:
         self.clock_pin.off()
         sleep(self.pause)
 
-    def set_value(self):
+    def load_values(self):
         for i in range(0, self.chain):
             for n in range(0, 8): # 74hc595 has 8 outputs
                 bit = self.registers[i][n]
@@ -31,9 +31,12 @@ class shifter595:
                 else:
                     self.data_pin.on()
                 self.tick()
+        self.latch()
 
     def latch(self):
         self.latch_pin.off()
         sleep(self.pause)
         self.latch_pin.on()
 
+    def clear_register(self, nr):
+        self.registers[nr] = [0, 0, 0, 0, 0, 0, 0, 0]
