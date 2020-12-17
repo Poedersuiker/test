@@ -15,7 +15,6 @@ for x in range(0, test_runs):
             s.clear_all_registers()
             s.registers[i][n] = 1
             s.load_values()
-            s.latch()
             sleep(pause)
 
 s.clear_all_registers()
