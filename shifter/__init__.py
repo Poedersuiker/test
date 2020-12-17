@@ -40,3 +40,8 @@ class shifter595:
 
     def clear_register(self, nr):
         self.registers[nr] = [0, 0, 0, 0, 0, 0, 0, 0]
+
+    def clear_all_registers(self):
+        for i in range(0, self.chain):
+            self.clear_register(i)
+            self.latch()
