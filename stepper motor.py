@@ -10,13 +10,21 @@ coil_B_2_pin = gpiozero.DigitalOutputDevice(26)
 def forward(delay, steps):
     i = 0
     while i in range(0, steps):
-        setStep(1, 0, 1, 0)
-        time.sleep(delay)
-        setStep(0, 1, 1, 0)
+        setStep(0, 1, 0, 0)
         time.sleep(delay)
         setStep(0, 1, 0, 1)
         time.sleep(delay)
+        setStep(0, 0, 0, 1)
+        time.sleep(delay)
         setStep(1, 0, 0, 1)
+        time.sleep(delay)
+        setStep(1, 0, 0, 0)
+        time.sleep(delay)
+        setStep(1, 0, 1, 0)
+        time.sleep(delay)
+        setStep(0, 0, 1, 0)
+        time.sleep(delay)
+        setStep(0, 1, 1, 0)
         time.sleep(delay)
         i += 1
 
