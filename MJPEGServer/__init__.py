@@ -79,12 +79,13 @@ class StreamingHandler(BaseHTTPRequestHandler):
                     font = cv2.FONT_HERSHEY_SIMPLEX
                     frame = cv2.putText(frame, str(watermark), (10, 40), font, 1, (255, 255, 255), 2)
                     cv2.imwrite(filename, frame)
+                    _, jpeg_frame = cv2.imencode('.jpg', frame)
 
                     self.wfile.write(b'--FRAME\r\n')
                     self.send_header('Content-Type', 'image/jpeg')
-                    self.send_header('Content-Length', len(frame))
+                    self.send_header('Content-Length', len(jpeg_frame))
                     self.end_headers()
-                    self.wfile.write(frame)
+                    self.wfile.write(jpeg_frame)
                     self.wfile.write(b'\r\n')
 
                 video_capture.release()
