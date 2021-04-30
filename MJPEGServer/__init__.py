@@ -70,7 +70,7 @@ class StreamingHandler(BaseHTTPRequestHandler):
                     # Send picture
                     sleep(0.1)
                     now = datetime.datetime.now()
-                    filename = now.strftime("./last.jpg")
+                    filename = "./last.jpg"
                     watermark = now.strftime("%Y-%m-%d %H:%M:%S")
                     try:
                         video_capture = cv2.VideoCapture(0)
