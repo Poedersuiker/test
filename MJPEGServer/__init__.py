@@ -102,7 +102,7 @@ class StreamingHandler(BaseHTTPRequestHandler):
                     self.wfile.write(frame)
                     self.wfile.write(b'\r\n')
             except Exception as e:
-                logging.warning(
+                print(
                     'Removed streaming client %s: %s',
                     self.client_address, str(e))
         else:
