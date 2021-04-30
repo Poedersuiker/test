@@ -66,39 +66,35 @@ class StreamingHandler(BaseHTTPRequestHandler):
             self.end_headers()
             try:
                 while True:
-                    with output.condition:
-                        output.condition.wait()
-                        frame = output.frame
+                    # Send picture
+                    now = datetime.now()
+                    filename = now.strftime("%Y%m%d%H%M%S.jpg")
+                    watermark = now.strftime("%Y-%m-%d %H:%M:%S")
+                    try:
+                        video_capture = cv2.VideoCapture(0)
+                        ret, frame = video_capture.read()
+                    except cv2.error as e:
+                        self.logger.error(e)
+                        frame = numpy.zeros((320, 280, 3), numpy.uint8)
+                    except Exception as e:
+                        self.logger.error(e)
+                        frame = numpy.zeros((320, 280, 3), numpy.uint8)
+                    else:
+                        self.logger.error('OpenCV2 error with capture device, but no Exception')
+                        frame = numpy.zeros((320, 280, 3), numpy.uint8)
 
-                        # Send picture
-                        now = datetime.now()
-                        filename = now.strftime("%Y%m%d%H%M%S.jpg")
-                        watermark = now.strftime("%Y-%m-%d %H:%M:%S")
-                        try:
-                            video_capture = cv2.VideoCapture(0)
-                            ret, frame = video_capture.read()
-                        except cv2.error as e:
-                            self.logger.error(e)
-                            frame = numpy.zeros((320, 280, 3), numpy.uint8)
-                        except Exception as e:
-                            self.logger.error(e)
-                            frame = numpy.zeros((320, 280, 3), numpy.uint8)
-                        else:
-                            self.logger.error('OpenCV2 error with capture device, but no Exception')
-                            frame = numpy.zeros((320, 280, 3), numpy.uint8)
+                    frame = cv2.rotate(frame, cv2.cv2.ROTATE_90_CLOCKWISE)
+                    font = cv2.FONT_HERSHEY_SIMPLEX
+                    cv2.putText(frame, str(watermark), (0, -40), font, 5, (255, 255, 255), 3)
+                    cv2.imwrite(filename, frame)
+                    if os.path.exists(filename):
+                        os.remove(filename)
+                        self.logger.info("Picture %s send" % filename)
+                    else:
+                        self.logger.warning("Problem sending picture")
+                        self.TelegramConnector.send_message('Problem with frontdoor picture')
+                    video_capture.release()
 
-                        frame = cv2.rotate(frame, cv2.cv2.ROTATE_90_CLOCKWISE)
-                        font = cv2.FONT_HERSHEY_SIMPLEX
-                        cv2.putText(frame, str(watermark), (0, -40), font, 5, (255, 255, 255), 3)
-                        cv2.imwrite(filename, frame)
-                        if os.path.exists(filename):
-                            os.remove(filename)
-                            self.logger.info("Picture %s send" % filename)
-                        else:
-                            self.logger.warning("Problem sending picture")
-                            self.TelegramConnector.send_message('Problem with frontdoor picture')
-                        video_capture.release()
-                        
                     self.wfile.write(b'--FRAME\r\n')
                     self.send_header('Content-Type', 'image/jpeg')
                     self.send_header('Content-Length', len(frame))
