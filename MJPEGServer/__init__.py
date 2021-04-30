@@ -86,11 +86,6 @@ class StreamingHandler(BaseHTTPRequestHandler):
                     font = cv2.FONT_HERSHEY_SIMPLEX
                     cv2.putText(frame, str(watermark), (0, -40), font, 5, (255, 255, 255), 3)
                     cv2.imwrite(filename, frame)
-                    if os.path.exists(filename):
-                        os.remove(filename)
-                        print("Picture %s send" % filename)
-                    else:
-                        print("Problem sending picture")
 
                     self.wfile.write(b'--FRAME\r\n')
                     self.send_header('Content-Type', 'image/jpeg')
