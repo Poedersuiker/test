@@ -15,7 +15,7 @@ class MJPEGServer:
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
     )
 
-    logger = logging.getLogger("Telegram Connector")
+    logger = logging.getLogger("HTTPServer")
 
     ch = logging.FileHandler('./test.log')
 
@@ -45,6 +45,21 @@ PAGE = """\
 
 
 class StreamingHandler(BaseHTTPRequestHandler):
+    # Enable logging
+    logging.basicConfig(
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
+    )
+
+    logger = logging.getLogger("Handler")
+
+    ch = logging.FileHandler('./test.log')
+
+    ch.setLevel(logging.INFO)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    ch.setFormatter(formatter)
+    logger.addHandler(ch)
+
+
     def do_GET(self):
         if self.path == '/':
             self.send_response(301)
@@ -92,7 +107,6 @@ class StreamingHandler(BaseHTTPRequestHandler):
                         self.logger.info("Picture %s send" % filename)
                     else:
                         self.logger.warning("Problem sending picture")
-                        self.TelegramConnector.send_message('Problem with frontdoor picture')
                     video_capture.release()
 
                     self.wfile.write(b'--FRAME\r\n')
@@ -102,7 +116,7 @@ class StreamingHandler(BaseHTTPRequestHandler):
                     self.wfile.write(frame)
                     self.wfile.write(b'\r\n')
             except Exception as e:
-                print(
+                self.logger.warning(
                     'Removed streaming client %s: %s',
                     self.client_address, str(e))
         else:
