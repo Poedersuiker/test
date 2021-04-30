@@ -4,6 +4,7 @@ import cv2
 import numpy
 import datetime
 import os
+from time import sleep
 
 
 class MJPEGServer:
@@ -65,13 +66,14 @@ class StreamingHandler(BaseHTTPRequestHandler):
             self.send_header('Content-Type', 'multipart/x-mixed-replace; boundary=FRAME')
             self.end_headers()
             try:
-                video_capture = cv2.VideoCapture(0)
                 while True:
                     # Send picture
+                    sleep(0.1)
                     now = datetime.datetime.now()
                     filename = now.strftime("./last.jpg")
                     watermark = now.strftime("%Y-%m-%d %H:%M:%S")
                     try:
+                        video_capture = cv2.VideoCapture(0)
                         ret, frame = video_capture.read()
                     except cv2.error as e:
                         print(e)
@@ -83,6 +85,8 @@ class StreamingHandler(BaseHTTPRequestHandler):
                         print('OpenCV2 error with capture device, but no Exception')
                         frame = numpy.zeros((320, 280, 3), numpy.uint8)
 
+                    video_capture.release()
+
                     font = cv2.FONT_HERSHEY_SIMPLEX
                     cv2.putText(frame, str(watermark), (0, -40), font, 5, (255, 255, 255), 3)
                     cv2.imwrite(filename, frame)
@@ -93,7 +97,6 @@ class StreamingHandler(BaseHTTPRequestHandler):
                     self.end_headers()
                     self.wfile.write(frame)
                     self.wfile.write(b'\r\n')
-                video_capture.release()
             except Exception as e:
                 print(
                     'Removed streaming client %s: %s',
