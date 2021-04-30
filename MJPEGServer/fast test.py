@@ -4,7 +4,7 @@ import cv2
 import numpy
 
 
-video_capture = cv2.VideoCapture(0)
+video_capture = cv2.VideoCapture(-1)
 filename = "./last.jpg"
 
 while video_capture.isOpened():
