@@ -15,7 +15,7 @@ while video_capture.isOpened():
     ret, frame = video_capture.read()
 
     font = cv2.FONT_HERSHEY_SIMPLEX
-    frame = cv2.putText(frame, str(watermark), (10, 40), font, 0.5, (255, 255, 255), 2)
+    frame = cv2.putText(frame, str(watermark), (10, 40), font, 1, (255, 255, 255), 2)
     cv2.imwrite(filename, frame)
 
 video_capture.release()
