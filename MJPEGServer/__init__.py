@@ -26,7 +26,8 @@ class MJPEGServer:
 
     def __init__(self, port=80):
         self.port = port
-        self.httpd = ThreadingHTTPServer('localhost', StreamingHandler)
+        self.server_address = ('', self.port)
+        self.httpd = ThreadingHTTPServer(self.server_address, StreamingHandler)
         self.httpd.serve_forever()
 
 
