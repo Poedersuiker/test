@@ -45,21 +45,6 @@ PAGE = """\
 
 
 class StreamingHandler(BaseHTTPRequestHandler):
-    # Enable logging
-    logging.basicConfig(
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
-    )
-
-    logger = logging.getLogger("Handler")
-
-    ch = logging.FileHandler('./test.log')
-
-    ch.setLevel(logging.INFO)
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    ch.setFormatter(formatter)
-    logger.addHandler(ch)
-
-
     def do_GET(self):
         if self.path == '/':
             self.send_response(301)
@@ -83,30 +68,29 @@ class StreamingHandler(BaseHTTPRequestHandler):
                 while True:
                     # Send picture
                     now = datetime.datetime.now()
-                    filename = now.strftime("%Y%m%d%H%M%S.jpg")
+                    filename = now.strftime("./last.jpg")
                     watermark = now.strftime("%Y-%m-%d %H:%M:%S")
                     try:
                         video_capture = cv2.VideoCapture(0)
                         ret, frame = video_capture.read()
                     except cv2.error as e:
-                        self.logger.error(e)
+                        print(e)
                         frame = numpy.zeros((320, 280, 3), numpy.uint8)
                     except Exception as e:
-                        self.logger.error(e)
+                        print(e)
                         frame = numpy.zeros((320, 280, 3), numpy.uint8)
                     else:
-                        self.logger.error('OpenCV2 error with capture device, but no Exception')
+                        print('OpenCV2 error with capture device, but no Exception')
                         frame = numpy.zeros((320, 280, 3), numpy.uint8)
 
-                    frame = cv2.rotate(frame, cv2.cv2.ROTATE_90_CLOCKWISE)
-                    font = cv2.FONT_HERSHEY_SIMPLEX
-                    cv2.putText(frame, str(watermark), (0, -40), font, 5, (255, 255, 255), 3)
+                    # font = cv2.FONT_HERSHEY_SIMPLEX
+                    # cv2.putText(frame, str(watermark), (0, -40), font, 5, (255, 255, 255), 3)
                     cv2.imwrite(filename, frame)
                     if os.path.exists(filename):
                         os.remove(filename)
-                        self.logger.info("Picture %s send" % filename)
+                        print("Picture %s send" % filename)
                     else:
-                        self.logger.warning("Problem sending picture")
+                        print("Problem sending picture")
                     video_capture.release()
 
                     self.wfile.write(b'--FRAME\r\n')
@@ -116,7 +100,7 @@ class StreamingHandler(BaseHTTPRequestHandler):
                     self.wfile.write(frame)
                     self.wfile.write(b'\r\n')
             except Exception as e:
-                self.logger.warning(
+                print(
                     'Removed streaming client %s: %s',
                     self.client_address, str(e))
         else:
