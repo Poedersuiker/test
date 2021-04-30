@@ -67,7 +67,7 @@ class StreamingHandler(BaseHTTPRequestHandler):
             try:
                 while True:
                     # Send picture
-                    now = datetime.now()
+                    now = datetime.datetime.now()
                     filename = now.strftime("%Y%m%d%H%M%S.jpg")
                     watermark = now.strftime("%Y-%m-%d %H:%M:%S")
                     try:
