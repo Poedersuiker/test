@@ -8,7 +8,7 @@ import os
 
 class MJPEGServer:
     """
-
+    TEST
     """
     # Enable logging
     logging.basicConfig(
