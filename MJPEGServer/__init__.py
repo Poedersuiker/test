@@ -17,7 +17,7 @@ class MJPEGServer:
 
     logger = logging.getLogger("Telegram Connector")
 
-    ch = logging.FileHandler('/var/log/Frontdoor/fd.log')
+    ch = logging.FileHandler('./test.log')
 
     ch.setLevel(logging.INFO)
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
