@@ -1,4 +1,5 @@
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from threading import Thread
 import logging
 import cv2
 import numpy
@@ -7,7 +8,7 @@ import os
 from time import sleep
 
 
-class MJPEGServer:
+class MJPEGServer(Thread):
     """
     TEST
     """
@@ -29,6 +30,8 @@ class MJPEGServer:
         self.port = port
         self.server_address = ('', self.port)
         self.httpd = ThreadingHTTPServer(self.server_address, StreamingHandler)
+
+    def run(self):
         self.httpd.serve_forever()
 
 
@@ -82,7 +85,7 @@ class StreamingHandler(BaseHTTPRequestHandler):
                     ret, frame = video_capture.read()
 
                     font = cv2.FONT_HERSHEY_SIMPLEX
-                    frame = cv2.putText(frame, str(watermark), (20, 440), font, 1, (255, 255, 255), 2)
+                    frame = cv2.putText(frame, str(watermark), (20, 460), font, 1, (255, 255, 255), 2)
                     cv2.imwrite(filename, frame)
                     _, jpeg_frame = cv2.imencode('.jpg', frame)
 
