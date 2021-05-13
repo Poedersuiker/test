@@ -68,11 +68,11 @@ class StreamingHandler(BaseHTTPRequestHandler):
             try:
                 filename = "./frame.jpg"
                 video_capture = cv2.VideoCapture(-1)
-                video_capture.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'))
-                width = 1920
-                height = 1080
-                video_capture.set(cv2.CAP_PROP_FRAME_WIDTH, width)
-                video_capture.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
+                # video_capture.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'))
+                # width = 1920
+                # height = 1080
+                # video_capture.set(cv2.CAP_PROP_FRAME_WIDTH, width)
+                # video_capture.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
                 ret, frame = video_capture.read()
                 while True:
                     sleep(0.1)
