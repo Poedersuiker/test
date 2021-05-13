@@ -70,7 +70,7 @@ class StreamingHandler(BaseHTTPRequestHandler):
             self.send_header('Content-Type', 'multipart/x-mixed-replace; boundary=FRAME')
             self.end_headers()
             try:
-                filename = "./frame.jpg"
+                filename = "/mnt/tmp/frame.jpg"
                 video_capture = cv2.VideoCapture(-1)
                 # video_capture.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'))
                 # width = 1920
