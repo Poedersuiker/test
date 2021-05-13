@@ -27,6 +27,7 @@ class MJPEGServer(Thread):
     logger.addHandler(ch)
 
     def __init__(self, port=80):
+        Thread.__init__(self)
         self.port = port
         self.server_address = ('', self.port)
         self.httpd = ThreadingHTTPServer(self.server_address, StreamingHandler)
