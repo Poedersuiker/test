@@ -82,7 +82,7 @@ class StreamingHandler(BaseHTTPRequestHandler):
                     ret, frame = video_capture.read()
 
                     font = cv2.FONT_HERSHEY_SIMPLEX
-                    frame = cv2.putText(frame, str(watermark), (10, 40), font, 1, (255, 255, 255), 2)
+                    frame = cv2.putText(frame, str(watermark), (20, 440), font, 1, (255, 255, 255), 2)
                     cv2.imwrite(filename, frame)
                     _, jpeg_frame = cv2.imencode('.jpg', frame)
 
